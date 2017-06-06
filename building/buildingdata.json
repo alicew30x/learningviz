@@ -1,0 +1,26 @@
+[
+	{
+		"question": 1,
+		"classSize": 50,
+		"hiCo": 13,
+		"medCo": 20,
+		"lowCo": 10,
+		"notMentioned": 7
+	},
+	{
+		"question": 2,
+		"classSize": 50,
+		"hiCo": 23,
+		"medCo": 14,
+		"lowCo": 10,
+		"notMentioned": 3
+	},
+	{
+		"question": 3,
+		"classSize": 50,
+		"hiCo": 3,
+		"medCo": 37,
+		"lowCo": 5,
+		"notMentioned": 5
+	}
+]
