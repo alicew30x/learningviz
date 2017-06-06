@@ -1,0 +1,20 @@
+.building rect {
+	fill: #C25943;
+	stroke: white;
+}
+
+.hiCo {
+	fill: #FE9E00;
+}
+
+.medCo {
+	fill: #FFB844;
+}
+
+.lowCo {
+	fill: #FFD38E;
+}
+
+.notMentioned {
+	fill: #FFEFD7;
+}

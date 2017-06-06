@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel = "stylesheet" type = "text/css" href = "bubblestyle.css" />
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+  </head>
+
+<body>
+
+<div id="chart"></div>
+<script>
+
+var width = 1000,
+    height = 800,
+    diameter = 500, //bubble max size
+    scale = 10, //bubble scaling with postnum
+    buckets = 4,
+    colors = d3.scale.category10(), //bubble colors
+    u1_words = [],
+    u2_words = [],
+    u3_words = [],
+    u4_words = [],
+    u5_words = [];
+
+
+var bubbles = d3.layout.pack()
+  .sort(null)
+  .size([diameter, diameter])
+  .padding(1.5);
+
+var svg = d3.select("#chart").append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .attr("transform", "translate(0,0)")
+  .attr("class", "bubble");
+
+d3.csv("bubbles.csv", function(error, data) {
+  data = data.map(function(d) {
+    d.value = +d["postnum"]; 
+    return d;});
+  data.map(function(d) {
+    u1_words.push(d.words0);
+    u1_words.push(d.words1);
+    u1_words.push(d.words2);
+    u1_words.push(d.words3);
+    u1_words.push(d.words4);
+  });
+
+  var nodes = bubbles.nodes({children:data}).filter(function(d) {return !d.children;}); //convert data to bubble format
+
+  var bubbleChart = svg.append("g")
+    .attr("transform", "translate(0,0)")
+    .selectAll(".bubble")
+    .data(nodes)
+    .enter();
+
+  var bubble = bubbleChart.append("g")
+    .attr("class", "bubble");
+
+
+  bubble.append("circle")
+    .attr("r", function(d) {return d.r;})
+    .attr("cx", function(d) {return d.x;})
+    .attr("cy", function(d) {return d.y;})
+    .style("fill", function(d) {return colors(d.value);})
+    .on("mouseover", function(d) {
+      var self = this;
+      d3.selectAll('svg circle') //hide other circles
+        .filter(function(x) { return self != this;})
+        .transition()
+        .delay(function(d,i) { return i * 10; })
+        .duration(1000)
+        .style("opacity", "0");
+    })
+    .on("mouseout", function(d) {
+      d3.selectAll('svg circle') //circles become visible
+      .transition()
+        .delay(function(d,i) { return i * 10; })
+        .duration(700)
+        .style("opacity", "1");
+    });
+
+  bubble.append("text")
+    .attr("x", function(d) {return d.x;})
+    .attr("y", function(d) {return d.y;})
+    .attr("text-anchor", "middle")
+    .text(function(d) {return d.user;});
+
+  bubble.append("text")
+    .attr("x", function(d) {return d.x;})
+    .attr("y", function(d) {return d.y+20;})
+    .attr("text-anchor", "middle")
+    .text(function(d) {return d.postnum + " posts";});
+
+  bubble.selectAll(".coherence")
+    .data(u1_words)
+    .enter()
+    .append("text")
+    .attr("x", function(d) {return d.x;})
+    .attr("y", function(d) {return d.y;})
+    .text(function(d) {return d;});
+
+  });
+      
+
+
+
+    
+</script>
+
+</body>
+</html>
