@@ -1,7 +1,7 @@
 [
 	{
 		"question": 0,
-		"classSize": 50,
+		"classSize": 80,
 		"studentCo": "high",
 		"hiCo": 13,
 		"medCo": 20,
@@ -19,7 +19,7 @@
 	},
 	{
 		"question": 2,
-		"classSize": 50,
+		"classSize": 20,
 		"studentCo": "med",
 		"hiCo": 3,
 		"medCo": 37,
