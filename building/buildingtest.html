@@ -19,13 +19,15 @@ var width = 1000,
     window_height = 30,
     building_width = 180
     coColors = ["#FE9E00", "#FFB844", "#FFD38E", "#FFEFD7"],
-    coLabels = ["High coherence", "Medium coherence", "Low coherence", "Not mentioned"];
+    coLabels = ["High coherence", "Medium coherence", "Low coherence", "Not mentioned"],
+    maxClassSizeSet = [];;
 
 var data = d3.json("buildingdata.json", function(error, data) {
     console.log(error);
     data.forEach(function(d) {
         d.question = +d.question;
         d.classSize = +d.classSize;
+        maxClassSizeSet.push(d.classSize);
         d.studentCo = d.studentCo;
         d.hiCo = +d.hiCo;
         d.medCo = +d.medCo;
@@ -34,11 +36,15 @@ var data = d3.json("buildingdata.json", function(error, data) {
     });
     console.log(data);
 
+var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buildings/windows accordingly
+
+console.log(maxClassSize);
+
     var svg = d3.select("#chart").append("svg")
         .attr("width", width)
         .attr("height", height);
 
-    var student = svg.selectAll(".student")
+    var student = svg.selectAll(".student") //individual coherence
         .data(data)
         .enter().append("g")
         .attr("class", "student")
@@ -75,7 +81,7 @@ var data = d3.json("buildingdata.json", function(error, data) {
         .attr("class", "building")
         .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + 50 + ")"; })
         .append("rect")
-            .attr("x", function(d) { return d.x;})
+            .attr("x", 0)
             .attr("y", function(d) { return d.y;})
             .attr("width", building_width)
             .attr("height", function(d) { return window_height * d.classSize/5 + 10*2;});
