@@ -18,3 +18,8 @@
 .notMentioned {
 	fill: #FFEFD7;
 }
+
+text {
+	font-family: "Calibri", sans-serif;
+	font-size: .8em;
+}

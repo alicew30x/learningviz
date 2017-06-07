@@ -17,13 +17,16 @@ var width = 1000,
     height = 1000,
     window_width = 20,
     window_height = 30,
-    building_width = 180;
+    building_width = 180
+    coColors = ["#FE9E00", "#FFB844", "#FFD38E", "#FFEFD7"],
+    coLabels = ["High coherence", "Medium coherence", "Low coherence", "Not mentioned"];
 
 var data = d3.json("buildingdata.json", function(error, data) {
     console.log(error);
     data.forEach(function(d) {
         d.question = +d.question;
         d.classSize = +d.classSize;
+        d.studentCo = d.studentCo;
         d.hiCo = +d.hiCo;
         d.medCo = +d.medCo;
         d.lowCo = +d.lowCo;
@@ -35,44 +38,85 @@ var data = d3.json("buildingdata.json", function(error, data) {
         .attr("width", width)
         .attr("height", height);
 
+    var student = svg.selectAll(".student")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "student")
+        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + 10 + ")";})
+        .append("rect")
+            .attr("x", building_width/4)
+            .attr("y", 0)
+            .attr("width", building_width/2)
+            .attr("height", 40)
+            .attr("fill", function(d) {
+                if(d.studentCo=="high") return coColors[0];
+                else if(d.studentCo=="med") return coColors[1];
+                else if(d.studentCo=="low") return coColors[2];
+                else if(d.studentCo=="notMentioned") coColors[3];
+            })
+
+    var studentLabels = svg.selectAll(".studentLabels")
+        .data(data)
+        .enter().append("g")
+        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + 10 + ")";})
+        .append("text")
+            .attr("x", building_width/2)
+            .attr("y", 20)
+            .text(function(d) {if(d.studentCo=="high") return coLabels[0];
+                                else if(d.studentCo=="med") return coLabels[1];
+                                else if(d.studentCo=="low") return coLabels[2];
+                                else if(d.studentCo=="notMentioned") return coLabels[3];
+            })
+            .attr("text-anchor", "middle");
+
     var buildings = svg.selectAll(".building")
         .data(data)
         .enter().append("g")
         .attr("class", "building")
-        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + 0 + ")"; })
+        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + 50 + ")"; })
         .append("rect")
             .attr("x", function(d) { return d.x;})
             .attr("y", function(d) { return d.y;})
             .attr("width", building_width)
             .attr("height", function(d) { return window_height * d.classSize/5 + 10*2;});
 
+    var buildingLabels = svg.selectAll(".buildingLabels")
+        .data(data)
+        .enter().append("g")
+        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + (window_height*d.classSize/5+10*2) + ")";})
+        .append("text")
+            .attr("x", building_width/2)
+            .attr("y", 80)
+            .text(function(d) {return "Question " + (d.question+1);})
+            .attr("text-anchor", "middle");
+
     var windows = svg.selectAll(".window")
         .data(d3.range(13))
         .enter().append("rect")
             .attr("class", "hiCo")
             .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40)
+            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
             .attr("width", window_width)
             .attr("height", window_height)
         .data(d3.range(20))
         .enter().append("rect")
             .attr("class", "medCo")
             .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40)
+            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
             .attr("width", window_width)
             .attr("height", window_height)
         .data(d3.range(10))
         .enter().append("rect")
             .attr("class", "lowCo")
             .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40)
+            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
             .attr("width", window_width)
             .attr("height", window_height)
         .data(d3.range(7))
         .enter().append("rect")
             .attr("class", "notMentioned")
             .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40)
+            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
             .attr("width", window_width)
             .attr("height", window_height);
 
