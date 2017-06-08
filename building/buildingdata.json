@@ -3,26 +3,26 @@
 		"question": 0,
 		"classSize": 80,
 		"studentCo": "high",
-		"hiCo": 13,
-		"medCo": 20,
-		"lowCo": 10,
+		"hiCo": 1,
+		"medCo": 2,
+		"lowCo": 62,
 		"notMentioned": 7
 	},
 	{
 		"question": 1,
 		"classSize": 90,
 		"studentCo": "low",
-		"hiCo": 23,
+		"hiCo": 38,
 		"medCo": 14,
-		"lowCo": 10,
-		"notMentioned": 3
+		"lowCo": 38,
+		"notMentioned": 0
 	},
 	{
 		"question": 2,
 		"classSize": 20,
 		"studentCo": "med",
-		"hiCo": 3,
-		"medCo": 37,
+		"hiCo": 5,
+		"medCo": 12,
 		"lowCo": 5,
 		"notMentioned": 5
 	}

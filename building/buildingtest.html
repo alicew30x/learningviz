@@ -16,9 +16,9 @@
 var width = 1000,
     height = 1000,
     window_width = 20,
-    window_height = 30,
+    window_height = 20,
     building_width = 180
-    coColors = ["#FE9E00", "#FFB844", "#FFD38E", "#FFEFD7"],
+    coColors = ["#ff6e00", "#FFB844", "#FFD38E", "#FFEFD7"],
     coLabels = ["High coherence", "Medium coherence", "Low coherence", "Not mentioned"],
     maxClassSizeSet = [],
     hiCoWindows = [],
@@ -38,12 +38,13 @@ var data = d3.json("buildingdata.json", function(error, data) {
         d.notMentioned = +d.notMentioned;
 
         maxClassSizeSet.push(d.classSize);
-        hiCoWindows.push(d.hiCo);
-        medCoWindows.push(d.medCo);
-        lowCoWindows.push(d.lowCo);
-        notMentionedWindows.push(d.notMentioned);
+        hiCoWindows.push(d.classSize - d.hiCo);
+        medCoWindows.push(d.classSize - d.medCo);
+        lowCoWindows.push(d.classSize - d.lowCo);
+        notMentionedWindows.push(d.classSize);
     });
     console.log(data);
+    console.log(hiCoWindows);
 
 var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buildings/windows accordingly
 
@@ -55,7 +56,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buil
         .data(data)
         .enter().append("g")
         .attr("class", "student")
-        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + ((window_height*maxClassSize/5 + 10*2) - (window_height*d.classSize/5 + 10*2) + 10) + ")";})
+        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + ((window_height*maxClassSize/5 + 20*2) - (window_height*d.classSize/5 + 20*2) + 10) + ")";})
         .append("rect")
             .attr("x", building_width/4)
             .attr("y", 0)
@@ -89,32 +90,61 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buil
         .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + 50 + ")"; })
         .append("rect")
             .attr("x", 0)
-            .attr("y", function(d) { return (window_height*maxClassSize/5 + 10*2) - (window_height*d.classSize/5 + 10*2);})
+            .attr("y", function(d) { return (window_height*maxClassSize/5 + 20*2) - (window_height*d.classSize/5 + 20*2);})
             .attr("width", building_width)
-            .attr("height", function(d) { return window_height * d.classSize/5 + 10*2;});
+            .attr("height", function(d) { return window_height * d.classSize/5 + d.classSize/5*10 + 20*2;});
 
     var buildingLabels = svg.selectAll(".buildingLabels")
         .data(data)
         .enter().append("g")
-        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + (window_height*maxClassSize/5+10*2) + ")";})
+        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + (window_height*maxClassSize/5 + maxClassSize/5*10 + 20*2) + ")";})
         .append("text")
             .attr("x", building_width/2)
             .attr("y", 80)
             .text(function(d) {return "Question " + (d.question+1);})
             .attr("text-anchor", "middle");
 
-    console.log(d3.range(function(d) {return hiCoWindows[0];}));
-
-    var hiWindows = svg.selectAll(".window")
+    var windows = svg.selectAll(".window")
         .data(data)
         .enter().append("g")
         .attr("class", "window")
         .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + ((window_height*maxClassSize/5) - (window_height*d.classSize/5) + 80) + ")";})
-        .data(d3.range(function(d) { return hiCoWindows[d.question];}))
+
+    console.log(notMentionedWindows)
+
+    var notMentioned = windows.selectAll(".notmentioned")
+        .data(function(d,i) {return d3.range(notMentionedWindows[i]).map(function(d) {return d*20;});})
+        .enter().append("rect")
+            .attr("class", "notMentioned")
+            .attr("x", (d,i) => i%5 * 30 + 20)
+            .attr("y", (d,i) => Math.floor(i/5) *30)
+            .attr("width", window_width)
+            .attr("height", window_height);
+
+    var low = windows.selectAll(".lowwindow")
+        .data(function(d,i) {return d3.range(lowCoWindows[i]).map(function(d) {return d*20;});})
+        .enter().append("rect")
+            .attr("class", "lowCo")
+            .attr("x", (d,i) => i%5 * 30  + 20)
+            .attr("y", (d,i) => Math.floor(i/5)*30)
+            .attr("width", window_width)
+            .attr("height", window_height);
+
+    var med = windows.selectAll(".medwindow")
+        .data(function(d,i) { return d3.range(medCoWindows[i]).map(function(d) {return d*20;});})
+        .enter().append("rect")
+            .attr("class", "medCo")
+            .attr("x", (d,i) => i%5 * 30 + 20)
+            .attr("y", (d,i) => Math.floor(i/5) *30)
+            .attr("width", window_width)
+            .attr("height", window_height);
+        
+    var hi = windows.selectAll(".hiwindow")
+        .data(function(d,i) { return d3.range(hiCoWindows[i]).map(function(d) {return d*20;});})
         .enter().append("rect")
             .attr("class", "hiCo")
             .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
+            .attr("y", (d,i) => Math.floor(i/5)%5 *30)
             .attr("width", window_width)
             .attr("height", window_height);
         // .data(data)
