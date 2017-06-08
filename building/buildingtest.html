@@ -38,8 +38,8 @@ var data = d3.json("buildingdata.json", function(error, data) {
         d.notMentioned = +d.notMentioned;
 
         maxClassSizeSet.push(d.classSize);
-        hiCoWindows.push(d.classSize - d.hiCo);
-        medCoWindows.push(d.classSize - d.medCo);
+        hiCoWindows.push(d.hiCo);
+        medCoWindows.push(d.classSize - d.medCo - d.hiCo);
         lowCoWindows.push(d.classSize - d.lowCo);
         notMentionedWindows.push(d.classSize);
     });
@@ -144,7 +144,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buil
         .enter().append("rect")
             .attr("class", "hiCo")
             .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/5)%5 *30)
+            .attr("y", (d,i) => Math.floor(i/5) *30)
             .attr("width", window_width)
             .attr("height", window_height);
         // .data(data)

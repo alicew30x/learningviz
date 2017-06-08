@@ -22,7 +22,7 @@
 		"classSize": 20,
 		"studentCo": "med",
 		"hiCo": 5,
-		"medCo": 12,
+		"medCo": 5	,
 		"lowCo": 5,
 		"notMentioned": 5
 	}
