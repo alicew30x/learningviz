@@ -26,7 +26,8 @@ var width = 1000,
     lowCoWindows = [],
     notMentionedWindows = [],
     windows = [],
-    varNames = [];
+    varNames = []
+    questionNum = 0;
 
 var data = d3.json("buildingdata.json", function(error, data) {
     console.log(error);
@@ -43,13 +44,13 @@ var data = d3.json("buildingdata.json", function(error, data) {
         window[varNames[d.question]] = [];
 
         //build window data
-        var xPos = 20,
+        var xPos = 0,
             yPos = 0,
             coherence;
 
         for (var i=0; i<d.hiCo; i++) {
             eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[0] });");
-            if(xPos<140) {
+            if(xPos<110) {
                 xPos+=30;
             }
             else {
@@ -60,7 +61,7 @@ var data = d3.json("buildingdata.json", function(error, data) {
 
         for (var i=0; i<d.medCo; i++) {
             eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[1] });");
-            if(xPos<140) {
+            if(xPos<110) {
                 xPos+=30;
             }
             else {
@@ -70,7 +71,7 @@ var data = d3.json("buildingdata.json", function(error, data) {
         }
         for (var i=0; i<d.lowCo; i++) {
             eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[2] });");
-            if(xPos<140) {
+            if(xPos<110) {
                 xPos+=30;
             }
             else {
@@ -80,7 +81,7 @@ var data = d3.json("buildingdata.json", function(error, data) {
         }
         for (var i=0; i<d.notMentioned; i++) {
             eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[3] });");
-            if(xPos<140) {
+            if(xPos<110) {
                 xPos+=30;
             }
             else {
@@ -97,8 +98,6 @@ var data = d3.json("buildingdata.json", function(error, data) {
     }
 
     );
-    console.log(data);
-    console.log(q1Windows);
 
 var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buildings/windows accordingly
 
@@ -162,43 +161,59 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buil
         .data(data)
         .enter().append("g")
         .attr("class", "window")
-        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + ((window_height*maxClassSize/5) - (window_height*d.classSize/5) + 80) + ")";})
+        .attr("transform", function(d) { return "translate(" + (d.question*building_width+20) + "," + ((window_height*maxClassSize/5) - (window_height*d.classSize/5) + 80) + ")";});
 
-    var notMentioned = windows.selectAll(".notmentioned")
-        .data(function(d,i) {return d3.range(notMentionedWindows[i]).map(function(d) {return d*20;});})
+    var coherenceWindows = windows.selectAll(".coherence")
+        .data(function (d) { 
+            var name = "q" + questionNum + "Windows";
+            var name = window[name];
+            questionNum++;
+            return name;})
         .enter().append("rect")
-            .attr("class", "notMentioned")
-            .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/5) *30)
-            .attr("width", window_width)
-            .attr("height", window_height);
+        .attr("x", function(d) { return d.x;})
+        .attr("y", function(d) {return d.y;})
+        .attr("width", window_width)
+        .attr("height", window_height)
+        .style("fill", function(d) {return d.coherence;});
 
-    var low = windows.selectAll(".lowwindow")
-        .data(function(d,i) {return d3.range(lowCoWindows[i]).map(function(d) {return d*20;});})
-        .enter().append("rect")
-            .attr("class", "lowCo")
-            .attr("x", (d,i) => i%5 * 30  + 20)
-            .attr("y", (d,i) => Math.floor(i/5)*30)
-            .attr("width", window_width)
-            .attr("height", window_height);
+        console.log(questionNum);
+        console.log(q0Windows);
 
-    var med = windows.selectAll(".medwindow")
-        .data(function(d,i) { return d3.range(medCoWindows[i]).map(function(d) {return d*20;});})
-        .enter().append("rect")
-            .attr("class", "medCo")
-            .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/5) *30)
-            .attr("width", window_width)
-            .attr("height", window_height);
+    // var notMentioned = windows.selectAll(".notmentioned")
+    //     .data(function(d,i) {return d3.range(notMentionedWindows[i]).map(function(d) {return d*20;});})
+    //     .enter().append("rect")
+    //         .attr("class", "notMentioned")
+    //         .attr("x", (d,i) => i%5 * 30 + 20)
+    //         .attr("y", (d,i) => Math.floor(i/5) *30)
+    //         .attr("width", window_width)
+    //         .attr("height", window_height);
+
+    // var low = windows.selectAll(".lowwindow")
+    //     .data(function(d,i) {return d3.range(lowCoWindows[i]).map(function(d) {return d*20;});})
+    //     .enter().append("rect")
+    //         .attr("class", "lowCo")
+    //         .attr("x", (d,i) => i%5 * 30  + 20)
+    //         .attr("y", (d,i) => Math.floor(i/5)*30)
+    //         .attr("width", window_width)
+    //         .attr("height", window_height);
+
+    // var med = windows.selectAll(".medwindow")
+    //     .data(function(d,i) { return d3.range(medCoWindows[i]).map(function(d) {return d*20;});})
+    //     .enter().append("rect")
+    //         .attr("class", "medCo")
+    //         .attr("x", (d,i) => i%5 * 30 + 20)
+    //         .attr("y", (d,i) => Math.floor(i/5) *30)
+    //         .attr("width", window_width)
+    //         .attr("height", window_height);
         
-    var hi = windows.selectAll(".hiwindow")
-        .data(function(d,i) { return d3.range(hiCoWindows[i]).map(function(d) {return d*20;});})
-        .enter().append("rect")
-            .attr("class", "hiCo")
-            .attr("x", (d,i) => i%5 * 30 + 20)
-            .attr("y", (d,i) => Math.floor(i/5) *30)
-            .attr("width", window_width)
-            .attr("height", window_height);
+    // var hi = windows.selectAll(".hiwindow")
+    //     .data(function(d,i) { return d3.range(hiCoWindows[i]).map(function(d) {return d*20;});})
+    //     .enter().append("rect")
+    //         .attr("class", "hiCo")
+    //         .attr("x", (d,i) => i%5 * 30 + 20)
+    //         .attr("y", (d,i) => Math.floor(i/5) *30)
+    //         .attr("width", window_width)
+    //         .attr("height", window_height);
 
 
         });
