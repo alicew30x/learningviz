@@ -24,7 +24,9 @@ var width = 1000,
     hiCoWindows = [],
     medCoWindows = [],
     lowCoWindows = [],
-    notMentionedWindows = [];
+    notMentionedWindows = [],
+    windows = [],
+    varNames = [];
 
 var data = d3.json("buildingdata.json", function(error, data) {
     console.log(error);
@@ -37,14 +39,66 @@ var data = d3.json("buildingdata.json", function(error, data) {
         d.lowCo = +d.lowCo;
         d.notMentioned = +d.notMentioned;
 
+        varNames[d.question] = "q" + d.question + "Windows";
+        window[varNames[d.question]] = [];
+
+        //build window data
+        var xPos = 20,
+            yPos = 0,
+            coherence;
+
+        for (var i=0; i<d.hiCo; i++) {
+            eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[0] });");
+            if(xPos<140) {
+                xPos+=30;
+            }
+            else {
+                xPos=0;
+                yPos+=30;
+            }
+        }
+
+        for (var i=0; i<d.medCo; i++) {
+            eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[1] });");
+            if(xPos<140) {
+                xPos+=30;
+            }
+            else {
+                xPos=0;
+                yPos+=30;
+            }
+        }
+        for (var i=0; i<d.lowCo; i++) {
+            eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[2] });");
+            if(xPos<140) {
+                xPos+=30;
+            }
+            else {
+                xPos=0;
+                yPos+=30;
+            }
+        }
+        for (var i=0; i<d.notMentioned; i++) {
+            eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[3] });");
+            if(xPos<140) {
+                xPos+=30;
+            }
+            else {
+                xPos=0;
+                yPos+=30;
+            }
+        }
+        
         maxClassSizeSet.push(d.classSize);
         hiCoWindows.push(d.hiCo);
         medCoWindows.push(d.classSize - d.medCo - d.hiCo);
         lowCoWindows.push(d.classSize - d.lowCo);
         notMentionedWindows.push(d.classSize);
-    });
+    }
+
+    );
     console.log(data);
-    console.log(hiCoWindows);
+    console.log(q1Windows);
 
 var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buildings/windows accordingly
 
@@ -110,8 +164,6 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buil
         .attr("class", "window")
         .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + ((window_height*maxClassSize/5) - (window_height*d.classSize/5) + 80) + ")";})
 
-    console.log(notMentionedWindows)
-
     var notMentioned = windows.selectAll(".notmentioned")
         .data(function(d,i) {return d3.range(notMentionedWindows[i]).map(function(d) {return d*20;});})
         .enter().append("rect")
@@ -147,34 +199,6 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buil
             .attr("y", (d,i) => Math.floor(i/5) *30)
             .attr("width", window_width)
             .attr("height", window_height);
-        // .data(data)
-        // .enter().append("rect")
-        //     .attr("class", "hiCo")
-        //     .attr("x", (d,i) => i%5 * 30 + 20)
-        //     .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
-        //     .attr("width", window_width)
-        //     .attr("height", window_height)
-        // .data(data)
-        // .enter().append("rect")
-        //     .attr("class", "medCo")
-        //     .attr("x", (d,i) => i%5 * 30 + 20)
-        //     .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
-        //     .attr("width", window_width)
-        //     .attr("height", window_height)
-        // .data(data)
-        // .enter().append("rect")
-        //     .attr("class", "lowCo")
-        //     .attr("x", (d,i) => i%5 * 30 + 20)
-        //     .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
-        //     .attr("width", window_width)
-        //     .attr("height", window_height)
-        // .data(data)
-        // .enter().append("rect")
-        //     .attr("class", "notMentioned")
-        //     .attr("x", (d,i) => i%5 * 30 + 20)
-        //     .attr("y", (d,i) => Math.floor(i/10)%10 * 45 + 40 + 50)
-        //     .attr("width", window_width)
-        //     .attr("height", window_height);
 
 
         });
