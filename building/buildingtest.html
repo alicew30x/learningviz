@@ -18,17 +18,14 @@ var width = 1000,
     window_width = 20,
     window_height = 20,
     building_width = 180
-    coColors = ["#ff6e00", "#FFB844", "#FFD38E", "#FFEFD7"],
+    coColors = ["#ff6e00", "#FFB844", "#FFD38E", "#FFEFD7"], //window colours
     coLabels = ["High coherence", "Medium coherence", "Low coherence", "Not mentioned"],
     maxClassSizeSet = [],
-    hiCoWindows = [],
-    medCoWindows = [],
-    lowCoWindows = [],
-    notMentionedWindows = [],
     windows = [],
     varNames = []
     questionNum = 0;
 
+//read data from json
 var data = d3.json("buildingdata.json", function(error, data) {
     console.log(error);
     data.forEach(function(d) {
@@ -40,6 +37,9 @@ var data = d3.json("buildingdata.json", function(error, data) {
         d.lowCo = +d.lowCo;
         d.notMentioned = +d.notMentioned;
 
+        maxClassSizeSet.push(d.classSize); //collect class size for each question
+
+        //generate array variable names for each question
         varNames[d.question] = "q" + d.question + "Windows";
         window[varNames[d.question]] = [];
 
@@ -47,13 +47,13 @@ var data = d3.json("buildingdata.json", function(error, data) {
         var xPos = 0,
             yPos = 0,
             coherence;
-
+        //add x/y position and colour to window object array    
         for (var i=0; i<d.hiCo; i++) {
             eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[0] });");
             if(xPos<110) {
                 xPos+=30;
             }
-            else {
+            else { //start new row of windows
                 xPos=0;
                 yPos+=30;
             }
@@ -89,17 +89,10 @@ var data = d3.json("buildingdata.json", function(error, data) {
                 yPos+=30;
             }
         }
-        
-        maxClassSizeSet.push(d.classSize);
-        hiCoWindows.push(d.hiCo);
-        medCoWindows.push(d.classSize - d.medCo - d.hiCo);
-        lowCoWindows.push(d.classSize - d.lowCo);
-        notMentionedWindows.push(d.classSize);
     }
-
     );
 
-var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buildings/windows accordingly
+var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up buildings/windows at the bottom
 
     var svg = d3.select("#chart").append("svg")
         .attr("width", width)
@@ -175,46 +168,6 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to adjust buil
         .attr("width", window_width)
         .attr("height", window_height)
         .style("fill", function(d) {return d.coherence;});
-
-        console.log(questionNum);
-        console.log(q0Windows);
-
-    // var notMentioned = windows.selectAll(".notmentioned")
-    //     .data(function(d,i) {return d3.range(notMentionedWindows[i]).map(function(d) {return d*20;});})
-    //     .enter().append("rect")
-    //         .attr("class", "notMentioned")
-    //         .attr("x", (d,i) => i%5 * 30 + 20)
-    //         .attr("y", (d,i) => Math.floor(i/5) *30)
-    //         .attr("width", window_width)
-    //         .attr("height", window_height);
-
-    // var low = windows.selectAll(".lowwindow")
-    //     .data(function(d,i) {return d3.range(lowCoWindows[i]).map(function(d) {return d*20;});})
-    //     .enter().append("rect")
-    //         .attr("class", "lowCo")
-    //         .attr("x", (d,i) => i%5 * 30  + 20)
-    //         .attr("y", (d,i) => Math.floor(i/5)*30)
-    //         .attr("width", window_width)
-    //         .attr("height", window_height);
-
-    // var med = windows.selectAll(".medwindow")
-    //     .data(function(d,i) { return d3.range(medCoWindows[i]).map(function(d) {return d*20;});})
-    //     .enter().append("rect")
-    //         .attr("class", "medCo")
-    //         .attr("x", (d,i) => i%5 * 30 + 20)
-    //         .attr("y", (d,i) => Math.floor(i/5) *30)
-    //         .attr("width", window_width)
-    //         .attr("height", window_height);
-        
-    // var hi = windows.selectAll(".hiwindow")
-    //     .data(function(d,i) { return d3.range(hiCoWindows[i]).map(function(d) {return d*20;});})
-    //     .enter().append("rect")
-    //         .attr("class", "hiCo")
-    //         .attr("x", (d,i) => i%5 * 30 + 20)
-    //         .attr("y", (d,i) => Math.floor(i/5) *30)
-    //         .attr("width", window_width)
-    //         .attr("height", window_height);
-
 
         });
 
