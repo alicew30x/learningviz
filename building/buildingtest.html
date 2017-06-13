@@ -145,7 +145,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
             console.log(Math.ceil(41/5));
             console.log(Math.ceil(82/5));
 
-    var buildingLabels = svg.selectAll(".buildingLabels")
+    var buildingLabels = svg.selectAll(".buildingLabels") //question number
         .data(data)
         .enter().append("g")
         .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + (window_height*maxClassSize/5 + maxClassSize/5*10 + 20*2) + ")";})
