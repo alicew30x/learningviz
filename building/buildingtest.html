@@ -92,6 +92,8 @@ var data = d3.json("buildingdata.json", function(error, data) {
     }
     );
 
+//TODO: clean up SVG structure
+
 var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up buildings/windows at the bottom
 
     var svg = d3.select("#chart").append("svg")
@@ -102,7 +104,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .data(data)
         .enter().append("g")
         .attr("class", "student")
-        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + ((window_height*maxClassSize/5 + 20*2) - (window_height*d.classSize/5 + 20*2) + 20) + ")";})
+        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + ((window_height*Math.ceil(maxClassSize/5) + Math.ceil(maxClassSize/5)*10 + 20*2) - (window_height*Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2)) + ")"; })
         .append("rect")
             .attr("x", building_width/4)
             .attr("y", 0)
@@ -118,7 +120,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     var studentLabels = svg.selectAll(".studentLabels")
         .data(data)
         .enter().append("g")
-        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + ((window_height*maxClassSize/5 + 20*2) - (window_height*d.classSize/5 + 20*2) +10) + ")";})
+        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + ((window_height*Math.ceil(maxClassSize/5) + Math.ceil(maxClassSize/5)*10 + 20*2) - (window_height*Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2)) + ")";})
         .append("text")
             .attr("x", building_width/2)
             .attr("y", 20)
@@ -133,12 +135,15 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .data(data)
         .enter().append("g")
         .attr("class", "building")
-        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + ((window_height*maxClassSize/5 + maxClassSize/5*10 + 20*2) - (window_height*d.classSize/5 + d.classSize/5*10 + 20*2) + 40) + ")"; })
+        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + ((window_height*Math.ceil(maxClassSize/5) + Math.ceil(maxClassSize/5)*10 + 20*2) - (window_height*Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2) + 40) + ")"; })
         .append("rect")
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", building_width)
-            .attr("height", function(d) { return window_height * d.classSize/5 + d.classSize/5*10 + 10*2;});
+            .attr("height", function(d) { return window_height* Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2;});
+
+            console.log(Math.ceil(41/5));
+            console.log(Math.ceil(82/5));
 
     var buildingLabels = svg.selectAll(".buildingLabels")
         .data(data)
@@ -154,7 +159,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .data(data)
         .enter().append("g")
         .attr("class", "window")
-        .attr("transform", function(d) { return "translate(" + (d.question*building_width+20) + "," + ((window_height*maxClassSize/5 + 20*2) - (window_height*d.classSize/5 + 20*2) + 80) + ")";});
+        .attr("transform", function(d) { return "translate(" + (d.question*building_width+20) + "," + ((window_height*Math.ceil(maxClassSize/5) + Math.ceil(maxClassSize/5)*10 + 20*2) - (window_height*Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2) + 60) + ")"; });
 
     var coherenceWindows = windows.selectAll(".coherence")
         .data(function (d) { 
