@@ -1,20 +1,20 @@
 [
 	{
 		"question": 0,
-		"classSize": 80,
+		"classSize": 82,
 		"studentCo": "high",
 		"hiCo": 1,
-		"medCo": 2,
+		"medCo": 4,
 		"lowCo": 62,
 		"notMentioned": 7
 	},
 	{
 		"question": 1,
-		"classSize": 90,
+		"classSize": 41,
 		"studentCo": "low",
-		"hiCo": 38,
-		"medCo": 14,
-		"lowCo": 38,
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
 		"notMentioned": 0
 	},
 	{
