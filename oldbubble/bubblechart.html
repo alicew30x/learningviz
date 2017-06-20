@@ -95,13 +95,12 @@ d3.csv("bubbles.csv", function(error, data) {
     .attr("text-anchor", "middle")
     .text(function(d) {return d.postnum + " posts";});
 
-  bubble.selectAll(".coherence")
-    .data(u1_words)
-    .enter()
+  var coherence = bubble.selectAll(".coherence")
     .append("text")
+    .enter().append("text")
     .attr("x", function(d) {return d.x;})
     .attr("y", function(d) {return d.y;})
-    .text(function(d) {return d;});
+    .text(function(d) {return u1words[d];});
 
   });
       

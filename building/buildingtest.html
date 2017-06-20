@@ -13,23 +13,24 @@
 <div id="chart"></div>
 <script>
 
-var width = 1000,
+var width = 2000,
     height = 1000,
-    window_width = 20,
-    window_height = 20,
-    building_width = 180
+    window_width = 15,
+    window_height = 15,
+    building_width = 80,
     coColors = ["#ff6e00", "#FFB844", "#FFD38E", "#FFEFD7"], //window colours
-    coLabels = ["High coherence", "Medium coherence", "Low coherence", "Not mentioned"],
+    coLabels = ["High", "Medium", "Low", "Not mentioned"],
     maxClassSizeSet = [],
     windows = [],
     varNames = []
-    questionNum = 0;
+    wordNum = 0;
 
 //read data from json
 var data = d3.json("buildingdata.json", function(error, data) {
     console.log(error);
     data.forEach(function(d) {
-        d.question = +d.question;
+        d.word = d.word;
+        d.wordNum = +d.wordNum;
         d.classSize = +d.classSize;
         d.studentCo = d.studentCo;
         d.hiCo = +d.hiCo;
@@ -37,11 +38,11 @@ var data = d3.json("buildingdata.json", function(error, data) {
         d.lowCo = +d.lowCo;
         d.notMentioned = +d.notMentioned;
 
-        maxClassSizeSet.push(d.classSize); //collect class size for each question
+        maxClassSizeSet.push(d.classSize); //collect class size for each word
 
-        //generate array variable names for each question
-        varNames[d.question] = "q" + d.question + "Windows";
-        window[varNames[d.question]] = [];
+        //generate array variable names for each word
+        varNames[d.wordNum] = "word" + d.wordNum + "Windows";
+        window[varNames[d.wordNum]] = [];
 
         //build window data
         var xPos = 0,
@@ -49,44 +50,44 @@ var data = d3.json("buildingdata.json", function(error, data) {
             coherence;
         //add x/y position and colour to window object array    
         for (var i=0; i<d.hiCo; i++) {
-            eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[0] });");
-            if(xPos<110) {
-                xPos+=30;
+            eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[0] });");
+            if(xPos<40) {
+                xPos+=20;
             }
             else { //start new row of windows
                 xPos=0;
-                yPos+=30;
+                yPos+=20;
             }
         }
 
         for (var i=0; i<d.medCo; i++) {
-            eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[1] });");
-            if(xPos<110) {
-                xPos+=30;
+            eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[1] });");
+            if(xPos<40) {
+                xPos+=20;
             }
             else {
                 xPos=0;
-                yPos+=30;
+                yPos+=20;
             }
         }
         for (var i=0; i<d.lowCo; i++) {
-            eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[2] });");
-            if(xPos<110) {
-                xPos+=30;
+            eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[2] });");
+            if(xPos<40) {
+                xPos+=20;
             }
             else {
                 xPos=0;
-                yPos+=30;
+                yPos+=20;
             }
         }
         for (var i=0; i<d.notMentioned; i++) {
-            eval(varNames[d.question] + ".push({ x: xPos, y: yPos, coherence: coColors[3] });");
-            if(xPos<110) {
-                xPos+=30;
+            eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[3] });");
+            if(xPos<40) {
+                xPos+=20;
             }
             else {
                 xPos=0;
-                yPos+=30;
+                yPos+=20;
             }
         }
     }
@@ -104,7 +105,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .data(data)
         .enter().append("g")
         .attr("class", "student")
-        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + ((window_height*Math.ceil(maxClassSize/5) + Math.ceil(maxClassSize/5)*10 + 20*2) - (window_height*Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2)) + ")"; })
+        .attr("transform", function(d) {return "translate(" + d.wordNum*building_width + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2)) + ")"; })
         .append("rect")
             .attr("x", building_width/4)
             .attr("y", 0)
@@ -120,7 +121,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     var studentLabels = svg.selectAll(".studentLabels")
         .data(data)
         .enter().append("g")
-        .attr("transform", function(d) {return "translate(" + d.question*building_width + "," + ((window_height*Math.ceil(maxClassSize/5) + Math.ceil(maxClassSize/5)*10 + 20*2) - (window_height*Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2)) + ")";})
+        .attr("transform", function(d) {return "translate(" + d.wordNum*building_width + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2)) + ")";})
         .append("text")
             .attr("x", building_width/2)
             .attr("y", 20)
@@ -135,37 +136,34 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .data(data)
         .enter().append("g")
         .attr("class", "building")
-        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + ((window_height*Math.ceil(maxClassSize/5) + Math.ceil(maxClassSize/5)*10 + 20*2) - (window_height*Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2) + 40) + ")"; })
+        .attr("transform", function(d) { return "translate(" + d.wordNum*building_width + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2) + 40) + ")"; })
         .append("rect")
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", building_width)
-            .attr("height", function(d) { return window_height* Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2;});
+            .attr("height", function(d) { return window_height* Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 20*2;});
 
-            console.log(Math.ceil(41/5));
-            console.log(Math.ceil(82/5));
-
-    var buildingLabels = svg.selectAll(".buildingLabels") //question number
+    var buildingLabels = svg.selectAll(".buildingLabels") //word number 
         .data(data)
         .enter().append("g")
-        .attr("transform", function(d) { return "translate(" + d.question*building_width + "," + (window_height*maxClassSize/5 + maxClassSize/5*10 + 20*2) + ")";})
+        .attr("transform", function(d) { return "translate(" + d.wordNum*building_width + "," + (window_height*maxClassSize/3 + maxClassSize/3*5 + 15*2) + ")";})
         .append("text")
             .attr("x", building_width/2)
             .attr("y", 80)
-            .text(function(d) {return "Question " + (d.question+1);})
+            .text(function(d) {return d.word;})
             .attr("text-anchor", "middle");
 
     var windows = svg.selectAll(".window")
         .data(data)
         .enter().append("g")
         .attr("class", "window")
-        .attr("transform", function(d) { return "translate(" + (d.question*building_width+20) + "," + ((window_height*Math.ceil(maxClassSize/5) + Math.ceil(maxClassSize/5)*10 + 20*2) - (window_height*Math.ceil(d.classSize/5) + Math.ceil(d.classSize/5)*10 + 20*2) + 60) + ")"; });
+        .attr("transform", function(d) { return "translate(" + (d.wordNum*building_width+15) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2) + 60) + ")"; });
 
     var coherenceWindows = windows.selectAll(".coherence")
         .data(function (d) { 
-            var name = "q" + questionNum + "Windows";
+            var name = "word" + wordNum + "Windows";
             var name = window[name];
-            questionNum++;
+            wordNum++;
             return name;})
         .enter().append("rect")
         .attr("x", function(d) { return d.x;})
@@ -181,4 +179,4 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
 </body>
 </html>
 
-<!-- This visualization aims to show your performance in relation to the entire class. Each building represents a different question in the assignment. The coloured windows represent the performance of other students in the class - the darker the colour, the better their performance. Your own performance is indicated by the block on top of the building. -->
+<!-- This visualization aims to show your performance in relation to the entire class. Each building represents a different word in the assignment. The coloured windows represent the performance of other students in the class - the darker the colour, the better their performance. Your own performance is indicated by the block on top of the building. -->

@@ -1,0 +1,51 @@
+[
+    {
+      "user":"Travis",
+      "postnum": 4,
+      "words": [
+        {"word": "education", "coherence": 4},
+        {"word": "learning", "coherence": 3},
+        {"word": "job", "coherence": 4},
+        {"word": "skills", "coherence": 2},
+        {"word": "grades", "coherence": 1}]
+   },
+    {
+      "user":"Alice",
+      "postnum": 7,
+      "words": [
+        {"word": "skills", "coherence": 3},
+        {"word": "learning", "coherence": 2},
+        {"word": "professors", "coherence": 4},
+        {"word": "exams", "coherence": 1},
+        {"word": "grades", "coherence": 1}]
+   },
+    {
+      "user":"Bob",
+      "postnum": 3,
+      "words": [
+        {"word": "graduate", "coherence": 1},
+        {"word": "skills", "coherence": 3},
+        {"word": "job", "coherence": 1},
+        {"word": "learning", "coherence": 2},
+        {"word": "grades", "coherence": 1}]
+   },
+       {
+      "user":"Em",
+      "postnum": 4,
+      "words": [
+        {"word": "education", "coherence": 4},
+        {"word": "learning", "coherence": 3},
+        {"word": "job", "coherence": 4},
+        {"word": "skills", "coherence": 2},
+        {"word": "graduation", "coherence": 1}]
+   },
+    {
+      "user":"David",
+      "postnum": 2,
+      "words": [
+        {"word": "technology", "coherence": 2},
+        {"word": "learning", "coherence": 3},
+        {"word": "job", "coherence": 4},
+        {"word": "education", "coherence": 4},
+        {"word": "grades", "coherence": 4}]
+   }]

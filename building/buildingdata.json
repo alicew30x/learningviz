@@ -1,15 +1,17 @@
 [
 	{
-		"question": 0,
+		"word": "education",
+		"wordNum" : 0,
 		"classSize": 82,
 		"studentCo": "high",
 		"hiCo": 1,
 		"medCo": 4,
 		"lowCo": 62,
-		"notMentioned": 7
+		"notMentioned": 15
 	},
 	{
-		"question": 1,
+		"word": "school",
+		"wordNum" : 1,
 		"classSize": 41,
 		"studentCo": "low",
 		"hiCo": 14,
@@ -18,12 +20,123 @@
 		"notMentioned": 0
 	},
 	{
-		"question": 2,
+		"word": "grades",
+		"wordNum" : 2,
 		"classSize": 20,
 		"studentCo": "med",
 		"hiCo": 5,
 		"medCo": 5	,
 		"lowCo": 5,
 		"notMentioned": 5
+	},
+		{
+		"word": "job",
+		"wordNum" : 3,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "expectations",
+		"wordNum" : 4,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "exams",
+		"wordNum" : 5,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "fail",
+		"wordNum" : 6,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "school",
+		"wordNum" : 7,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "students",
+		"wordNum" : 8,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "compete",
+		"wordNum" : 9,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "prospects",
+		"wordNum" : 10,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "parents",
+		"wordNum" : 11,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "pressure",
+		"wordNum" : 12,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
+	},
+		{
+		"word": "society",
+		"wordNum" : 13,
+		"classSize": 41,
+		"studentCo": "low",
+		"hiCo": 14,
+		"medCo": 15,
+		"lowCo": 12,
+		"notMentioned": 0
 	}
 ]
