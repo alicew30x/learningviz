@@ -23,3 +23,13 @@ text {
 	font-family: "Calibri", sans-serif;
 	font-size: .8em;
 }
+
+.d3-tip {
+	font-family: "Calibri", sans-serif;
+	font-size: .8em;
+	color: white;
+	background: rgba(0,0,0,0.8);
+	border-radius: 5px;
+	padding: 10px;
+	transition: .3s;
+}

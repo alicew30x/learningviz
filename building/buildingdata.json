@@ -2,12 +2,12 @@
 	{
 		"word": "education",
 		"wordNum" : 0,
-		"classSize": 82,
+		"classSize": 43,
 		"studentCo": "high",
-		"hiCo": 1,
+		"hiCo": 12,
 		"medCo": 4,
-		"lowCo": 62,
-		"notMentioned": 15
+		"lowCo": 22,
+		"notMentioned": 5
 	},
 	{
 		"word": "school",
@@ -34,20 +34,20 @@
 		"wordNum" : 3,
 		"classSize": 41,
 		"studentCo": "low",
-		"hiCo": 14,
+		"hiCo": 2,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 22,
+		"notMentioned": 2
 	},
 		{
 		"word": "expectations",
 		"wordNum" : 4,
 		"classSize": 41,
 		"studentCo": "low",
-		"hiCo": 14,
-		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"hiCo": 1,
+		"medCo": 31,
+		"lowCo": 6,
+		"notMentioned": 3
 	},
 		{
 		"word": "exams",
