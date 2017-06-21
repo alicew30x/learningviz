@@ -3,6 +3,10 @@
 	stroke: white;
 }
 
+path {
+	fill: rgba(255,255,255,0.02);
+}
+
 .hiCo {
 	fill: #ff6e00;
 }

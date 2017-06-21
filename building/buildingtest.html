@@ -115,7 +115,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
                 if(d.studentCo=="high") return coColors[0];
                 else if(d.studentCo=="med") return coColors[1];
                 else if(d.studentCo=="low") return coColors[2];
-                else if(d.studentCo=="notMentioned") coColors[3];
+                else if(d.studentCo=="notMentioned") return coColors[3];
             });
 
     var studentLabels = svg.selectAll(".studentLabels")
@@ -166,11 +166,16 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
             .text(function(d) {return d.word;})
             .attr("text-anchor", "middle");
 
-    var windows = svg.selectAll(".window")
+    var windows = svg.selectAll(".windows")
         .data(data)
         .enter().append("g")
-        .attr("class", "window")
+        .attr("class", "windows")
         .attr("transform", function(d) { return "translate(" + (d.wordNum*building_width+15) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2) + 60) + ")"; });
+
+    var lineFunction = d3.svg.line()
+        .x(function(d) {return d.x;})
+        .y(function(d) {return d.y;})
+        .interpolate("linear");
 
     var coherenceWindows = windows.selectAll(".coherence")
         .data(function (d) { 
@@ -178,15 +183,25 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
             var name = window[name];
             wordNum++;
             return name;})
-        .enter().append("rect")
+        .enter().append("g")
+        .attr("class", "windowPane")
+        .append("rect")
         .attr("x", function(d) { return d.x;})
         .attr("y", function(d) {return d.y;})
         .attr("width", window_width)
         .attr("height", window_height)
         .style("fill", function(d) {return d.coherence;});
 
-        });
+    var windowOverlay = windows.selectAll(".windowPane")
+        .append("path") //translucent "glass" overlay
+        .attr("d", lineFunction([{"x": 0, "y":0},
+                                         {"x": 0, "y": window_height},
+                                         {"x": window_width, "y": window_height},
+                                         {"x": window_width/2, "y": window_height/1.5}]));
 
+        });
+    
+    //find percentage of coherence
     function percentage(classSize, coherence) {
         return (coherence/classSize*100).toFixed(0) + "%";
     }
