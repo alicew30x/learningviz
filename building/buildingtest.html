@@ -135,11 +135,11 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     //tip showing coherence percentages of the selected word
     var tip = d3.tip()
         .attr("class", "d3-tip")
-        .offset([300, 0])
-        .html(function(d) {return "High coherence: " + d.hiCo + "<br/>" + 
-            "Medium coherence: " + d.medCo + "<br/>" +
-            "Low coherence: " + d.lowCo + "<br/>" + 
-            "Not mentioned: " + d.notMentioned;});
+        .offset([300, 0]) //TODO: fix offset
+        .html(function(d) {return "High coherence: " + percentage(d.classSize, d.hiCo) + "<br/>" + 
+            "Medium coherence: " + percentage(d.classSize, d.medCo) + "<br/>" +
+            "Low coherence: " + percentage(d.classSize, d.lowCo) + "<br/>" + 
+            "Not mentioned: " + percentage(d.classSize, d.notMentioned);});
 
     svg.call(tip);
 
@@ -187,14 +187,8 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
 
         });
 
-    function handleMouseOver(d, i) {
-        d3.select(this).attr({
-            fill: "orange"
-        });
-    }
-
-    function handleMouseOut(d, i) {
-
+    function percentage(classSize, coherence) {
+        return (coherence/classSize*100).toFixed(0) + "%";
     }
 
 
