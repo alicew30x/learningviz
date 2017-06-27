@@ -62,7 +62,7 @@ function drawHeatMap(rows) {
   var tip = d3.tip()
     .attr("class", "d3-tip")
     .offset([-10, 0])
-    .html(function(d) {return d.postnum;});
+    .html(function(d) {return "Posts: " + d.postnum;});
 
   svg.call(tip);
 
@@ -85,15 +85,28 @@ function drawHeatMap(rows) {
   .on("mouseover", tip.show)
   .on("mouseout", tip.hide);
 
+  var userPic = svg.selectAll(".userPic")
+    .data(rows, function(d) {
+      return d.row + ':' + d.col;
+    })
+    .enter()
+    .append("circle")
+    .attr("cx", function(d) { return -50;})
+    .attr("cy", function(d) {return d.col*tileHeight + tileHeight/2;})
+    .attr("r", 30)
+    .style("fill", "grey")
+    .style("shape-rendering", "geometricPrecision");
+
   var nameLabels = svg.selectAll(".nameLabel")
     .data(rows, function(d) {
       return d.row + ':' + d.col;
     })
     .enter()
     .append("text")
-    .attr("x", function(d) { return -100})
-    .attr("y", function(d) { return d.col * tileHeight + tileHeight/2})
-    .text(function(d) { return d.user;});
+    .attr("x", function(d) { return -50;})
+    .attr("y", function(d) { return d.col * tileHeight + tileHeight;})
+    .text(function(d) { return d.user;})
+    .style("text-anchor", "middle");
 
   var colorScale = d3.scale.quantile()
               .domain([0, buckets - 1, d3.max(rows, function (d) { return d.value; })])
