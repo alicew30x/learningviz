@@ -193,14 +193,19 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .style("fill", function(d) {return d.coherence;});
 
     var windowOverlay = windows.selectAll(".windowPane")
+        .data(function (d) {
+            var name = "word" + wordNum + "Windows";
+            var name = window[name];
+            wordNum++;
+            return name;})
+        .enter()
         .append("path") //translucent "glass" overlay
-        .attr("d", lineFunction([{"x": 0, "y":0},
-                                         {"x": 0, "y": window_height},
-                                         {"x": window_width, "y": window_height},
-                                         {"x": window_width/2, "y": window_height/1.5}]));
-
-        });
+        .attr("d", lineFunction([{"x": d.x, "y": d.y + window_height/3},
+                                 {"x": d.x, "y": d.y + window_height},
+                                 {"x": d.x + window_width, "y": d.y + window_height},
+                                 {"x": d.x + window_width/3, "y": d.y + window_height/1.5}]));
     
+    });
     //find percentage of coherence
     function percentage(classSize, coherence) {
         return (coherence/classSize*100).toFixed(0) + "%";
