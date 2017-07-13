@@ -8,6 +8,7 @@
   <meta charset="utf-8">
   <link rel = "stylesheet" type = "text/css" href = "style.css" />
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 </head>
 <body>
 
@@ -30,7 +31,7 @@ var svg = d3.select('body').append("svg")
 
 d3.csv("data.csv", function(error, data) {
 
-  // data.sort(function(a,b) { return b.value - a.value; });
+  data.sort(function(a,b) { return b.value - a.value; });
 
   var extent = d3.extent(data, function(d) { return d.value; });
   var barScale = d3.scale.linear()
@@ -38,7 +39,7 @@ d3.csv("data.csv", function(error, data) {
       .range([0, barHeight]);
 
   var keys = data.map(function(d,i) { return d.name; });
-  var numBars = keys.length;
+  var numBars = keys.length-1;
 
   var x = d3.scale.linear()
       .domain(extent)
@@ -46,20 +47,31 @@ d3.csv("data.csv", function(error, data) {
 
   var axisLabels = ["not mentioned", "low coherence", "medium coherence", "high coherence"];
 
-  var xAxis = d3.svg.axis()
-      .scale(x)
-      .ticks(3)
-      .tickFormat(function(d, i){return axisLabels[i]})
-      .orient("right"); 
+  var xAxis = d3.svg.axis();
+      // .scale(x)
+      // .ticks(4)
+      // .tickFormat(function(d, i){return axisLabels[i]})
+      // .orient("right"); 
       
   var circles = svg.selectAll("circle")
-          .data(x.ticks(3))
+          .data(x.ticks(4))
         .enter().append("circle")
           .attr("r", function(d) {return barScale(d);})
           .style("fill", "none")
           .style("stroke", "black")
           .style("stroke-dasharray", "2,2")
           .style("stroke-width",".5px");
+
+  //tip showing coherence percentages of the selected word
+  var tip = d3.tip()
+      .attr("class", "d3-tip")
+      .offset([50,100])
+      .html(function(d) {
+        if (d.value==0.01) return "not mentioned";
+        else if(d.value==0.02) return "low coherence";
+        else if(d.value==0.03) return "medium coherence";
+        else return "high coherence";});
+  svg.call(tip);
 
   var arc = d3.svg.arc()
       .startAngle(function(d,i) { return (i * 2 * Math.PI) / numBars; })
@@ -71,7 +83,9 @@ d3.csv("data.csv", function(error, data) {
         .enter().append("path")
           .each(function(d) { d.outerRadius = 0; })
           .style("fill", function (d) { return color(d.name); })
-          .attr("d", arc);
+          .attr("d", arc)
+          .on("mouseover", tip.show)
+          .on("mouseout", tip.hide);
 
   segments.transition().ease("elastic").duration(1000).delay(function(d,i) {return (25-i)*100;})
           .attrTween("d", function(d,index) {
@@ -94,9 +108,9 @@ d3.csv("data.csv", function(error, data) {
       .style("stroke-width",".5px")
       .attr("transform", function(d, i) { return "rotate(" + (i * 360 / numBars) + ")"; });
 
-  svg.append("g")
-    .attr("class", "x axis")
-    .call(xAxis);
+  // svg.append("g")
+  //   .attr("class", "x axis")
+  //   .call(xAxis);
 
   // Labels
   var labelRadius = barHeight * 1.025;
@@ -121,6 +135,10 @@ d3.csv("data.csv", function(error, data) {
         .text(function(d) {return d.toUpperCase(); });
 
 });
+
+// var drag = d3.behavior.drag().on("drag", function() {
+//   svg.attr('transform', `rotate(${theta + 90}, $d3.event.x}, $d3.event.y})`);
+// });
 
 </script>
 </body>

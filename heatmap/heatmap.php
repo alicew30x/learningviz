@@ -2,15 +2,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <title>Discussion Visualization</title>
+    <meta charset="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel = "stylesheet" type = "text/css" href = "heatstyle.css" />
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
   </head>
 
 <body>
 
 <div id="chart"></div>
+
+
 <script>
 
 var margin = { top: 50, right: 0, bottom: 20, left: 150 },
