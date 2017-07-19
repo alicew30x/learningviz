@@ -2,12 +2,11 @@
 	{
 		"word": "education",
 		"wordNum" : 0,
-		"classSize": 43,
+		"classSize": 38,
 		"studentCo": "high",
 		"hiCo": 12,
 		"medCo": 4,
-		"lowCo": 22,
-		"notMentioned": 5
+		"lowCo": 22
 	},
 	{
 		"word": "school",
@@ -22,32 +21,29 @@
 	{
 		"word": "grades",
 		"wordNum" : 2,
-		"classSize": 20,
+		"classSize": 15,
 		"studentCo": "med",
 		"hiCo": 5,
-		"medCo": 5	,
-		"lowCo": 5,
-		"notMentioned": 5
+		"medCo": 5,
+		"lowCo": 5
 	},
 		{
 		"word": "job",
 		"wordNum" : 3,
-		"classSize": 41,
+		"classSize": 39,
 		"studentCo": "low",
 		"hiCo": 2,
 		"medCo": 15,
-		"lowCo": 22,
-		"notMentioned": 2
+		"lowCo": 22
 	},
 		{
 		"word": "expectations",
 		"wordNum" : 4,
-		"classSize": 41,
+		"classSize": 38,
 		"studentCo": "high",
 		"hiCo": 1,
 		"medCo": 31,
-		"lowCo": 6,
-		"notMentioned": 3
+		"lowCo": 6
 	},
 		{
 		"word": "exams",
@@ -56,8 +52,7 @@
 		"studentCo": "low",
 		"hiCo": 14,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 12
 	},
 		{
 		"word": "fail",
@@ -66,8 +61,7 @@
 		"studentCo": "low",
 		"hiCo": 14,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 12
 	},
 		{
 		"word": "school",
@@ -76,8 +70,7 @@
 		"studentCo": "high",
 		"hiCo": 14,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 12
 	},
 		{
 		"word": "students",
@@ -86,8 +79,7 @@
 		"studentCo": "notMentioned",
 		"hiCo": 14,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 12
 	},
 		{
 		"word": "compete",
@@ -96,8 +88,7 @@
 		"studentCo": "med",
 		"hiCo": 14,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 12
 	},
 		{
 		"word": "prospects",
@@ -106,8 +97,7 @@
 		"studentCo": "med",
 		"hiCo": 14,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 12
 	},
 		{
 		"word": "parents",
@@ -116,18 +106,16 @@
 		"studentCo": "low",
 		"hiCo": 14,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 12
 	},
 		{
 		"word": "pressure",
 		"wordNum" : 12,
-		"classSize": 41,
+		"classSize": 30,
 		"studentCo": "high",
 		"hiCo": 2,
 		"medCo": 22,
-		"lowCo": 6,
-		"notMentioned": 11
+		"lowCo": 6
 	},
 		{
 		"word": "society",
@@ -136,7 +124,6 @@
 		"studentCo": "low",
 		"hiCo": 14,
 		"medCo": 15,
-		"lowCo": 12,
-		"notMentioned": 0
+		"lowCo": 12
 	}
 ]
