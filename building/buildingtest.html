@@ -13,12 +13,14 @@
 <div id="chart"></div>
 <script>
 
-var width = 2000,
-    height = 1000,
+var width = 1200,
+    height = 500,
     window_width = 15,
     window_height = 15,
     building_width = 80,
-    coColors = ["#ff6e00", "#FFB844", "#FFD38E", "#FFEFD7"], //window colours
+    bgColor = "#031521",
+    coColors = ["#005283", "#3684B3", "#62A2C8", "#96C7E3"], //window colours
+    // coColors = ["#ff6e00", "#FFB844", "#FFD38E", "#FFEFD7"], //window colours
     coLabels = ["High", "Medium", "Low", "Not mentioned"],
     maxClassSizeSet = [],
     windows = [],
@@ -37,7 +39,9 @@ var data = d3.json("buildingdata.json", function(error, data) {
         d.hiCo = +d.hiCo;
         d.medCo = +d.medCo;
         d.lowCo = +d.lowCo;
-        d.notMentioned = +d.notMentioned;
+        d.notMentioned = d.classSize - (d.hiCo + d.medCo + d.lowCo);
+
+        console.log(d.notMentioned);
 
         maxClassSizeSet.push(d.classSize); //collect class size for each word
 
@@ -110,8 +114,6 @@ var data = d3.json("buildingdata.json", function(error, data) {
     }
     );
 
-    console.log(studentPos);
-
 //TODO: clean up SVG structure
 
 var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up buildings/windows at the bottom
@@ -119,6 +121,11 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     var svg = d3.select("#chart").append("svg")
         .attr("width", width)
         .attr("height", height);
+
+    svg.append("rect") //background colour
+        .attr("class", "background")
+        .attr("width", "100%")
+        .attr("height", window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 20*2 +  maxClassSize);
 
 
     // var student = svg.selectAll(".student") //individual coherence

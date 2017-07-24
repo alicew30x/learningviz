@@ -1,6 +1,14 @@
 .building rect {
-	fill: #C25943;
-	stroke: white;
+	fill: #63636D;
+	stroke: #031521;
+}
+
+.background {
+		background: rgb(22,57,86); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(22,57,86,1) 0%, rgba(99,73,107,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, rgba(22,57,86,1) 0%,rgba(99,73,107,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, rgba(22,57,86,1) 0%,rgba(99,73,107,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#163956', endColorstr='#63496b',GradientType=0 ); /* IE6-9 */
 }
 
 path {
