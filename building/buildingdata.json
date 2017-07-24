@@ -14,7 +14,7 @@
 		"classSize": 41,
 		"studentCo": "low",
 		"hiCo": 14,
-		"medCo": 15,
+		"medCo": 10,
 		"lowCo": 12,
 		"notMentioned": 0
 	},
@@ -25,7 +25,7 @@
 		"studentCo": "med",
 		"hiCo": 5,
 		"medCo": 5,
-		"lowCo": 5
+		"lowCo": 1
 	},
 		{
 		"word": "job",
@@ -42,7 +42,7 @@
 		"classSize": 38,
 		"studentCo": "high",
 		"hiCo": 1,
-		"medCo": 31,
+		"medCo": 24,
 		"lowCo": 6
 	},
 		{

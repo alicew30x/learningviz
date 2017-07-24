@@ -32,12 +32,13 @@ var data = d3.json("buildingdata.json", function(error, data) {
     data.forEach(function(d) {
         d.word = d.word;
         d.wordNum = +d.wordNum;
-        d.classSize = +d.classSize;
-        d.studentCo = d.studentCo;
         d.hiCo = +d.hiCo;
         d.medCo = +d.medCo;
         d.lowCo = +d.lowCo;
         d.notMentioned = d.classSize - (d.hiCo + d.medCo + d.lowCo);
+        d.classSize = d.classSize-d.notMentioned;
+        d.studentCo = d.studentCo;
+
 
         maxClassSizeSet.push(d.classSize); //collect class size for each word
 
