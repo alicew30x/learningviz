@@ -205,12 +205,36 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
             return name;})
         .enter().append("g")
         .attr("class", "windowPane")
-        .append("rect")
+
+    coherenceWindows.append("rect")
         .attr("x", function(d) { return d.x;})
         .attr("y", function(d) {return d.y;})
         .attr("width", window_width)
         .attr("height", window_height)
-        .style("fill", function(d) {return d.coherence;});
+        .style("fill", function(d) {return d.coherence;})
+        .style("stroke", "white");
+
+    // coherenceWindows.append("ellipse")
+    //     .attr("class", "window_effect")
+    //     // .attr("transform",function(d) { return "translate(" + 100 + "," + 100 + ") rotate(-45)"; })
+    //     .attr("cx", function(d) {return d.x + window_width/2;})
+    //     .attr("cy", function(d) {return d.y + window_height/2;})
+    //     .attr("rx", 3)
+    //     .attr("ry", 5);
+
+    coherenceWindows.append("rect")
+        .attr("class", "window_effect")
+        .attr("x", function(d) { return d.x + window_width/2;})
+        .attr("y", function(d) {return d.y;})
+        .attr("width", 2)
+        .attr("height", window_height);
+    coherenceWindows.append("rect")
+        .attr("class", "window_effect")
+        .attr("x", function(d) { return d.x-1;})
+        .attr("y", function(d) {return d.y+window_height;})
+        .attr("width", window_width+2)
+        .attr("height", 3);
+
 
     var student = svg.selectAll(".student") //user coherence shown as dot in each building
         .data(data)
