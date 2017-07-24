@@ -94,13 +94,8 @@ var data = d3.json("buildingdata.json", function(error, data) {
         }
 
         if (d.studentCo=="notMentioned") {
-            xPos
-            studentPos[d.wordNum] = { x: 200, y: 200};
+            studentPos[d.wordNum] = { x: xPos, y: yPos};
         }
-
-
-
-        // TODO: how to display student if keyword isn't mentioned?
 
         // for (var i=0; i<d.notMentioned; i++) {
         //     eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[3] });");
@@ -116,7 +111,6 @@ var data = d3.json("buildingdata.json", function(error, data) {
     );
 
     console.log(studentPos);
-    console.log(varNames);
 
 //TODO: clean up SVG structure
 
