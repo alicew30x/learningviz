@@ -22,8 +22,9 @@ var width = 2000,
     coLabels = ["High", "Medium", "Low", "Not mentioned"],
     maxClassSizeSet = [],
     windows = [],
-    varNames = []
-    wordNum = 0;
+    varNames = [],
+    wordNum = 0,
+    studentPos = [];
 
 //read data from json
 var data = d3.json("buildingdata.json", function(error, data) {
@@ -48,7 +49,11 @@ var data = d3.json("buildingdata.json", function(error, data) {
         var xPos = 0,
             yPos = 0,
             coherence;
-        //add x/y position and colour to window object array    
+        //add x/y position and colour to window object array
+
+        if (d.studentCo=="high") { //check for student coherence, get position of first coherence window if it matches
+            studentPos[d.wordNum] = { x: xPos, y: yPos};
+        }    
         for (var i=0; i<d.hiCo; i++) {
             eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[0] });");
             if(xPos<40) {
@@ -60,6 +65,9 @@ var data = d3.json("buildingdata.json", function(error, data) {
             }
         }
 
+        if (d.studentCo=="med") { 
+            studentPos[d.wordNum] = { x: xPos, y: yPos};
+        }   
         for (var i=0; i<d.medCo; i++) {
             eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[1] });");
             if(xPos<40) {
@@ -70,6 +78,10 @@ var data = d3.json("buildingdata.json", function(error, data) {
                 yPos+=20;
             }
         }
+
+        if (d.studentCo=="low") { 
+            studentPos[d.wordNum] = { x: xPos, y: yPos};
+        }   
         for (var i=0; i<d.lowCo; i++) {
             eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[2] });");
             if(xPos<40) {
@@ -80,6 +92,16 @@ var data = d3.json("buildingdata.json", function(error, data) {
                 yPos+=20;
             }
         }
+
+        if (d.studentCo=="notMentioned") {
+            xPos
+            studentPos[d.wordNum] = { x: 200, y: 200};
+        }
+
+
+
+        // TODO: how to display student if keyword isn't mentioned?
+
         // for (var i=0; i<d.notMentioned; i++) {
         //     eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[3] });");
         //     if(xPos<40) {
@@ -93,6 +115,9 @@ var data = d3.json("buildingdata.json", function(error, data) {
     }
     );
 
+    console.log(studentPos);
+    console.log(varNames);
+
 //TODO: clean up SVG structure
 
 var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up buildings/windows at the bottom
@@ -100,6 +125,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     var svg = d3.select("#chart").append("svg")
         .attr("width", width)
         .attr("height", height);
+
 
     // var student = svg.selectAll(".student") //individual coherence
     //     .data(data)
@@ -192,6 +218,15 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .attr("width", window_width)
         .attr("height", window_height)
         .style("fill", function(d) {return d.coherence;});
+
+    var student = svg.selectAll(".student") //user coherence shown as dot in each building
+        .data(data)
+        .enter().append("g")
+        .attr("transform", function(d) {return "translate(" + (d.wordNum*building_width+15) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2) + 60) + ")";})
+        .append("circle")
+        .attr("cx", function(d,i) {return studentPos[i].x + 7;})
+        .attr("cy", function(d,i) {return studentPos[i].y + 7;})
+        .attr("r", 7);
 
     // var windowOverlay = windows.selectAll(".windowPane")
     //     .data(function (d) {
