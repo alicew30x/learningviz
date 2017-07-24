@@ -37,7 +37,7 @@ var data = d3.json("buildingdata.json", function(error, data) {
         d.hiCo = +d.hiCo;
         d.medCo = +d.medCo;
         d.lowCo = +d.lowCo;
-        d.notMentioned = +d.notMentioned;
+        d.notMentioned = d.classSize - (d.hiCo + d.medCo + d.lowCo);
 
         maxClassSizeSet.push(d.classSize); //collect class size for each word
 
@@ -109,8 +109,6 @@ var data = d3.json("buildingdata.json", function(error, data) {
         // }
     }
     );
-
-    console.log(studentPos);
 
 //TODO: clean up SVG structure
 
@@ -216,11 +214,29 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     var student = svg.selectAll(".student") //user coherence shown as dot in each building
         .data(data)
         .enter().append("g")
-        .attr("transform", function(d) {return "translate(" + (d.wordNum*building_width+15) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2) + 60) + ")";})
-        .append("circle")
+        .attr("transform", function(d) {return "translate(" + (d.wordNum*building_width+15) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2) + 60) + ")";});
+
+    student.append("circle")//face
         .attr("cx", function(d,i) {return studentPos[i].x + 7;})
         .attr("cy", function(d,i) {return studentPos[i].y + 7;})
-        .attr("r", 7);
+        .attr("r", 6)
+        
+    student.append("circle") //eyes
+        .attr("cx", function(d,i) {return studentPos[i].x + 4;})
+        .attr("cy", function(d,i) {return studentPos[i].y + 7;})
+        .attr("r", 1)
+        .style("fill", "white");
+    student.append("circle") //eyes
+        .attr("cx", function(d,i) {return studentPos[i].x + 8;})
+        .attr("cy", function(d,i) {return studentPos[i].y + 7;})
+        .attr("r", 1)
+        .style("fill", "white");
+    student.append("ellipse") //mouth
+        .attr("cx", function(d,i) {return studentPos[i].x + 6;})
+        .attr("cy", function(d,i) {return studentPos[i].y + 10;})
+        .attr("rx", 3)
+        .attr("ry", 1)
+        .style("fill", "white");
 
     // var windowOverlay = windows.selectAll(".windowPane")
     //     .data(function (d) {
