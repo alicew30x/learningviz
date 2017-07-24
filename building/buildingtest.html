@@ -216,11 +216,12 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     var student = svg.selectAll(".student") //user coherence shown as dot in each building
         .data(data)
         .enter().append("g")
+        .attr("class", "student")
         .attr("transform", function(d) {return "translate(" + (d.wordNum*building_width+15) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*5 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*5 + 15*2) + 60) + ")";})
         .append("circle")
         .attr("cx", function(d,i) {return studentPos[i].x + 7;})
         .attr("cy", function(d,i) {return studentPos[i].y + 7;})
-        .attr("r", 7);
+        .attr("r", 6);
 
     // var windowOverlay = windows.selectAll(".windowPane")
     //     .data(function (d) {
