@@ -18,6 +18,7 @@ var width = 2000,
     window_width = 15,
     window_height = 15,
     building_width = 90,
+    buckets = 4,
     coColors = ["#60C60E", "#F0C88D", "#F6D426", "#FFEFD7"], //window colours
     coLabels = ["High", "Medium", "Low", "Not mentioned"],
     maxClassSizeSet = [],
@@ -118,6 +119,28 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     var svg = d3.select("#chart").append("svg")
         .attr("width", width)
         .attr("height", height);
+
+    var colorScale = d3.scale.quantile()
+              .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
+              .range(coColors);
+
+    var legend = svg.selectAll(".legend")
+    .data([0].concat(colorScale.quantiles()), function(d) { return d;})
+    .enter().append("g")
+    .attr("class", "legend");
+
+  legend.append("rect")
+    .attr("x", function(d) { return 20;})
+    .attr("y", function(d, i) {return 20 * i;} )
+    .attr("width", 20)
+    .attr("height", 20 )
+    .style("fill", function(d, i) { return coColors[i]; });
+
+  legend.append("text")
+    .attr("class", "legend_label")
+    .attr("x", function(d) { return 20; })
+    .attr("y", function(d, i) { return 20*i + 20/2})
+    .text(function(d, i) { return coLabels[i]; });
 
 
     // var student = svg.selectAll(".student") //individual coherence

@@ -118,9 +118,8 @@ function drawHeatMap(rows) {
               .range(colors);
 
   var legend = svg.selectAll(".legend")
-    .data([0].concat(colorScale.quantiles()), function(d) { return d;});
-
-  legend.enter().append("g")
+    .data([0].concat(colorScale.quantiles()), function(d) { return d;})
+    .enter().append("g")
     .attr("class", "legend");
 
   legend.append("rect")
