@@ -114,14 +114,16 @@ var data = d3.json("buildingdata.json", function(error, data) {
     }
     );
 
-//TODO: clean up SVG structure
 
 var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up buildings/windows at the bottom
+
+//TODO: add "baseline"
 
     var svg = d3.select("#chart").append("svg")
         .attr("width", width)
         .attr("height", height);
 
+    //LEGEND
     var colorScale = d3.scale.quantile()
               .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
               .range(coColors);
@@ -131,14 +133,14 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     .enter().append("g")
     .attr("class", "legend");
 
-  legend.append("rect")
+    legend.append("rect")
     .attr("x", function(d,i) { return 20 + legend_block_width*i;})
     .attr("y", 30)
     .attr("width", legend_block_width)
     .attr("height", legend_block_height)
     .style("fill", function(d, i) { return coColors[i]; });
 
-  legend.append("text")
+    legend.append("text")
     .attr("class", "legend_label")
     .attr("x", function(d,i) {return 20 + legend_block_width*i + legend_block_width/2;})
     .attr("y", 60)
@@ -184,9 +186,13 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     //         .attr("text-anchor", "middle");
 
     //tip showing coherence percentages of the selected word
+    //find percentage of coherence
+    function percentage(classSize, coherence) {
+        return (coherence/classSize*100).toFixed(0) + "%";
+    }
+
     var tip = d3.tip()
         .attr("class", "d3-tip")
-        .offset([300, 0]) //TODO: fix offset
         .html(function(d) {return "High coherence: " + percentage(d.classSize, d.hiCo) + "<br/>" + 
             "Medium coherence: " + percentage(d.classSize, d.medCo) + "<br/>" +
             "Low coherence: " + percentage(d.classSize, d.lowCo) + "<br/>" + 
@@ -194,40 +200,34 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
 
     svg.call(tip);
 
+    //BUILDINGS
     var buildings = svg.selectAll(".building")
         .data(data)
         .enter().append("g")
         .attr("class", "building")
-        .attr("transform", function(d) { return "translate(" + (d.wordNum*building_width+2) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*10 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 15*2) + 40) + ")"; })
-        .append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", building_width)
-            .attr("height", function(d) { return window_height* Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 20*2;})
+        .attr("transform", function(d) { return "translate(" + (20 + d.wordNum*building_width+2) + "," + (40 + (window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*10 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 15*2) + 40) + ")"; })
+
+    buildings.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", building_width)
+        .attr("height", function(d) { return window_height* Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 20*2;})
         .on("mouseover", tip.show)
         .on("mouseout", tip.hide);
 
-
-    var buildingLabels = svg.selectAll(".buildingLabels") //word number 
-        .data(data)
-        .enter().append("g")
-        .attr("transform", function(d) { return "translate(" + d.wordNum*building_width + "," + (window_height*maxClassSize/3 + maxClassSize/3*10 + 15*2) + ")";})
-        .append("text")
+    //keyword labels
+    buildings.append("text")
             .attr("x", building_width/2)
-            .attr("y", 80)
-            .text(function(d) {return d.word;})
-            .attr("text-anchor", "middle");
+            .attr("y", function(d) { return 30 + window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 15*2;})
+            .attr("text-anchor", "middle")
+            .text(function(d) {return d.word;});
 
-    var windows = svg.selectAll(".windows")
-        .data(data)
-        .enter().append("g")
+    //coherence windows
+    var windows = buildings.append("g")
         .attr("class", "windows")
-        .attr("transform", function(d) { return "translate(" + (d.wordNum*building_width+20) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*10 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 15*2) + 60) + ")"; });
-
-    var lineFunction = d3.svg.line()
-        .x(function(d) {return d.x;})
-        .y(function(d) {return d.y;})
-        .interpolate("linear");
+        .attr("transform", "translate(" + 20 + "," + 20 + ")")
+        .on("mouseover", tip.show)
+        .on("mouseout", tip.hide);
 
     var coherenceWindows = windows.selectAll(".coherence")
         .data(function (d) { 
@@ -236,7 +236,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
             wordNum++;
             return name;})
         .enter().append("g")
-        .attr("class", "windowPane")
+        .attr("class", "windowPane");
 
     coherenceWindows.append("rect") //base window
         .attr("x", function(d) { return d.x;})
@@ -253,18 +253,17 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .attr("width", 2)
         .attr("height", window_height);
 
-    coherenceWindows.append("rect")
+    coherenceWindows.append("rect") //windowsill
         .attr("class", "window_effect_dark")
-        .attr("x", function(d) { return d.x-1;})
+        .attr("x", function(d) { return d.x;})
         .attr("y", function(d) {return d.y+window_height;})
         .attr("width", window_width+2)
         .attr("height", 3);
 
-
-    var student = svg.selectAll(".student") //user coherence shown as dot in each building
-        .data(data)
-        .enter().append("g")
-        .attr("transform", function(d) {return "translate(" + (d.wordNum*building_width+20) + "," + ((window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*10 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 15*2) + 60) + ")";});
+    //STUDENT
+    var student = buildings.append("g")
+        .attr("class", "student")
+        .attr("transform", "translate(" + 20 + "," + 20 + ")");
 
     student.append("circle")//face
         .attr("cx", function(d,i) {return studentPos[i].x + 7;})
@@ -303,11 +302,6 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     //                              {"x": d.x + window_width/3, "y": d.y + window_height/1.5}]));
     
     });
-    //find percentage of coherence
-    function percentage(classSize, coherence) {
-        return (coherence/classSize*100).toFixed(0) + "%";
-    }
-
 
 </script>
 </body>
