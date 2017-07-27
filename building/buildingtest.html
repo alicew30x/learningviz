@@ -18,8 +18,10 @@ var width = 2000,
     window_width = 15,
     window_height = 15,
     building_width = 90,
-    buckets = 4,
-    coColors = ["#60C60E", "#F0C88D", "#F6D426", "#FFEFD7"], //window colours
+    legend_block_width = 60,
+    legend_block_height = 20,
+    buckets = 3,
+    coColors = ["#60C60E", "#F0C88D", "#F6D426"], //window colours
     coLabels = ["High", "Medium", "Low", "Not mentioned"],
     maxClassSizeSet = [],
     windows = [],
@@ -130,17 +132,24 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     .attr("class", "legend");
 
   legend.append("rect")
-    .attr("x", function(d) { return 20;})
-    .attr("y", function(d, i) {return 20 * i;} )
-    .attr("width", 20)
-    .attr("height", 20 )
+    .attr("x", function(d,i) { return 20 + legend_block_width*i;})
+    .attr("y", 30)
+    .attr("width", legend_block_width)
+    .attr("height", legend_block_height)
     .style("fill", function(d, i) { return coColors[i]; });
 
   legend.append("text")
     .attr("class", "legend_label")
-    .attr("x", function(d) { return 20; })
-    .attr("y", function(d, i) { return 20*i + 20/2})
+    .attr("x", function(d,i) {return 20 + legend_block_width*i + legend_block_width/2;})
+    .attr("y", 60)
+    .attr("text-anchor", "middle")
     .text(function(d, i) { return coLabels[i]; });
+
+    legend.append("text")
+        .attr("class", "heading")
+        .attr("x", 20)
+        .attr("y", 20)
+        .text("Legend: Coherence levels");
 
 
     // var student = svg.selectAll(".student") //individual coherence
@@ -243,7 +252,7 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .attr("y", function(d) {return d.y;})
         .attr("width", 2)
         .attr("height", window_height);
-        
+
     coherenceWindows.append("rect")
         .attr("class", "window_effect_dark")
         .attr("x", function(d) { return d.x-1;})

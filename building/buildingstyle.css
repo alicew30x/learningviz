@@ -55,3 +55,7 @@ text {
 	padding: 10px;
 	transition: .3s;
 }
+
+.heading {
+	font-size: 1.5em;
+}
