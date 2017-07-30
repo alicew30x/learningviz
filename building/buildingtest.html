@@ -21,7 +21,7 @@ var width = 2000,
     legend_block_width = 60,
     legend_block_height = 20,
     buckets = 3,
-    coColors = ["#60C60E", "#F0C88D", "#F6D426"], //window colours
+    coColors = ["#60C60E", "#F0C88D", "#F6D426", "2d2d2d"], //window colours
     coLabels = ["High", "Medium", "Low", "Not mentioned"],
     maxClassSizeSet = [],
     windows = [],
@@ -138,7 +138,8 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     .attr("y", 30)
     .attr("width", legend_block_width)
     .attr("height", legend_block_height)
-    .style("fill", function(d, i) { return coColors[i]; });
+    .style("fill", function(d, i) { return coColors[i]; })
+    .style("stroke", "white");
 
     legend.append("text")
     .attr("class", "legend_label")
@@ -212,6 +213,8 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .attr("y", 0)
         .attr("width", building_width)
         .attr("height", function(d) { return window_height* Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 20*2;})
+        .style("fill", "#184D81")
+        .style("stroke", "white")
         .on("mouseover", tip.show)
         .on("mouseout", tip.hide);
 
@@ -246,12 +249,12 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .style("fill", function(d) {return d.coherence;})
         .style("stroke", "white");
 
-    coherenceWindows.append("rect") //window edges
-        .attr("class", "window_effect")
-        .attr("x", function(d) { return d.x + window_width/2;})
-        .attr("y", function(d) {return d.y;})
-        .attr("width", 2)
-        .attr("height", window_height);
+    // coherenceWindows.append("rect") //window edges
+    //     .attr("class", "window_effect")
+    //     .attr("x", function(d) { return d.x + window_width/2;})
+    //     .attr("y", function(d) {return d.y;})
+    //     .attr("width", 2)
+    //     .attr("height", window_height);
 
     coherenceWindows.append("rect") //windowsill
         .attr("class", "window_effect_dark")
@@ -287,6 +290,21 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .attr("rx", 3)
         .attr("ry", 1)
         .style("fill", "white");
+
+    wordNum=0;
+
+    var studentBlock = buildings.append("rect")
+        .attr("class", "studentBlock")
+        .attr("transform", "translate(" + 15 + "," + -10 + ")")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", building_width*0.7)
+        .attr("height", 10)
+        .style("fill", function(d) { 
+            if(d.studentCo=="high") return coColors[0];
+            else if(d.studentCo=="med") return coColors[1];
+            else if(d.studentCo=="low") return coColors[2];
+            else return "black"; });
 
     // var windowOverlay = windows.selectAll(".windowPane")
     //     .data(function (d) {
