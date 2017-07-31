@@ -20,6 +20,9 @@ var width = 2000,
     building_width = 90,
     legend_block_width = 60,
     legend_block_height = 20,
+    coBlockYPos = [],
+    coBlockPos = 0,
+    startY = 0,
     buckets = 3,
     coColors = ["#60C60E", "#F0C88D", "#F6D426", "2d2d2d"], //window colours
     coLabels = ["High", "Medium", "Low", "Not mentioned"],
@@ -27,7 +30,9 @@ var width = 2000,
     windows = [],
     varNames = [],
     wordNum = 0,
-    studentPos = [];
+    studentPos = [],
+    buildingHeight = []
+    buildingHeightPos = 0;
 
 //read data from json
 var data = d3.json("buildingdata.json", function(error, data) {
@@ -57,6 +62,19 @@ var data = d3.json("buildingdata.json", function(error, data) {
 
         if (d.studentCo=="high") { //check for student coherence, get position of first coherence window if it matches
             studentPos[d.wordNum] = { x: xPos, y: yPos};
+            startY = 10;
+            coBlockYPos.push(startY);
+            yPos+=10;
+            for (var i=0; i<d.hiCo; i++) {
+                eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[0] });");
+                if(xPos<40) {
+                    xPos+=20;
+                }
+                else { //start new row of windows
+                    xPos=0;
+                    yPos+=25;
+                }
+            }
         }    
         for (var i=0; i<d.hiCo; i++) {
             eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[0] });");
@@ -71,20 +89,63 @@ var data = d3.json("buildingdata.json", function(error, data) {
 
         if (d.studentCo=="med") { 
             studentPos[d.wordNum] = { x: xPos, y: yPos};
-        }   
-        for (var i=0; i<d.medCo; i++) {
-            eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[1] });");
-            if(xPos<40) {
-                xPos+=20;
+            if(xPos==0) {
+                yPos += 15;
+                startY = yPos;
             }
             else {
-                xPos=0;
-                yPos+=25;
+                yPos += 45;
+                startY = yPos;
+            }
+            coBlockYPos.push(startY);
+            xPos = 0;
+            // yPos += 45;
+            for (var i=0; i<d.medCo; i++) {
+                eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[1] });");
+                if(xPos<40) {
+                    xPos+=20;
+                }
+                else {
+                    xPos=0;
+                    yPos+=25;
+                }
+            }
+        }   
+        else {
+            for (var i=0; i<d.medCo; i++) {
+                eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[1] });");
+                if(xPos<40) {
+                    xPos+=20;
+                }
+                else {
+                    xPos=0;
+                    yPos+=25;
+                }
             }
         }
 
         if (d.studentCo=="low") { 
             studentPos[d.wordNum] = { x: xPos, y: yPos};
+            if(xPos==0) {
+                yPos += 20;
+                startY = yPos;
+            }
+            else {
+                yPos += 45;
+                startY = yPos;
+            }
+            coBlockYPos.push(startY);
+            xPos = 0;
+            for (var i=0; i<d.medCo; i++) {
+                eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[2] });");
+                if(xPos<40) {
+                    xPos+=20;
+                }
+                else {
+                    xPos=0;
+                    yPos+=25;
+                }
+            }
         }   
         for (var i=0; i<d.lowCo; i++) {
             eval(varNames[d.wordNum] + ".push({ x: xPos, y: yPos, coherence: coColors[2] });");
@@ -99,6 +160,15 @@ var data = d3.json("buildingdata.json", function(error, data) {
 
         if (d.studentCo=="notMentioned") {
             studentPos[d.wordNum] = { x: xPos, y: yPos};
+            if(xPos==0) {
+                yPos += 15;
+                startY = yPos;
+            }
+            else {
+                yPos += 45;
+                startY = yPos;
+            }
+            coBlockYPos.push(startY);
         }
 
         // for (var i=0; i<d.notMentioned; i++) {
@@ -111,9 +181,10 @@ var data = d3.json("buildingdata.json", function(error, data) {
         //         yPos+=20;
         //     }
         // }
+
+        buildingHeight.push(yPos + 15); 
     }
     );
-
 
 var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up buildings/windows at the bottom
 
@@ -206,22 +277,26 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
         .data(data)
         .enter().append("g")
         .attr("class", "building")
-        .attr("transform", function(d) { return "translate(" + (20 + d.wordNum*building_width+2) + "," + (40 + (window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*10 + 15*2) - (window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 15*2) + 40) + ")"; })
+        .attr("transform", function(d) { buildingHeightPos++; return "translate(" + (20 + d.wordNum*building_width+2) + "," + (200 + (window_height*Math.ceil(maxClassSize/3) + Math.ceil(maxClassSize/3)*10 + 15*2) - (buildingHeight[buildingHeightPos-1] + 45)) + ")"; })
+
+    buildingHeightPos = 0;
 
     buildings.append("rect")
         .attr("x", 0)
         .attr("y", 0)
         .attr("width", building_width)
-        .attr("height", function(d) { return window_height* Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 20*2 + 20;})
+        .attr("height", function(d) { buildingHeightPos++; return buildingHeight[buildingHeightPos-1] + 45;})
         .style("fill", "#184D81")
         .style("stroke", "white")
         .on("mouseover", tip.show)
         .on("mouseout", tip.hide);
 
+    buildingHeightPos = 0;
+
     //keyword labels
     buildings.append("text")
             .attr("x", building_width/2)
-            .attr("y", function(d) { return 30 + window_height*Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 15*2 + 20;})
+            .attr("y", function(d) {buildingHeightPos++; return buildingHeight[buildingHeightPos-1] + 60;})
             .attr("text-anchor", "middle")
             .text(function(d) {return d.word;});
 
@@ -292,9 +367,38 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
     //     .style("fill", "white");
 
     //top coherence block
-    var studentBlock = buildings.append("rect")
-        .attr("class", "studentBlock")
-        .attr("transform", "translate(" + 15 + "," + -10 + ")")
+    // var studentBlock = buildings.append("rect")
+    //     .attr("class", "studentBlock")
+    //     .attr("transform", "translate(" + 15 + "," + -10 + ")")
+    //     .attr("x", 0)
+    //     .attr("y", 0)
+    //     .attr("width", building_width*0.7)
+    //     .attr("height", 10)
+    //     .style("fill", function(d) { 
+    //         if(d.studentCo=="high") return coColors[0];
+    //         else if(d.studentCo=="med") return coColors[1];
+    //         else if(d.studentCo=="low") return coColors[2];
+    //         else return "black"; });
+
+    //coherence block at bottom
+    // var bottomBlock = buildings.append("rect")
+    //     .attr("class", "bottomBlock")
+    //     .attr("transform", function(d) { return "translate(" + 15 + "," + (window_height* Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 25) + ")";})
+    //     .attr("x", 0)
+    //     .attr("y", 0)
+    //     .attr("width", building_width*0.7)
+    //     .attr("height", 15)
+    //     .style("fill", function(d) { 
+    //         if(d.studentCo=="high") return coColors[0];
+    //         else if(d.studentCo=="med") return coColors[1];
+    //         else if(d.studentCo=="low") return coColors[2];
+    //         else return "black"; });
+
+    //coherence block at top of corresponding level
+
+    var middleBlock = buildings.append("rect")
+        .attr("class", "middleBlock")
+        .attr("transform", function(d) { coBlockPos++; return "translate(" + 15 + "," + coBlockYPos[coBlockPos-1] + ")";})
         .attr("x", 0)
         .attr("y", 0)
         .attr("width", building_width*0.7)
@@ -303,22 +407,8 @@ var maxClassSize = d3.max(maxClassSizeSet); //find max class size to line up bui
             if(d.studentCo=="high") return coColors[0];
             else if(d.studentCo=="med") return coColors[1];
             else if(d.studentCo=="low") return coColors[2];
-            else return "black"; });
-
-    var bottomBlock = buildings.append("rect")
-        .attr("class", "bottomBlock")
-        .attr("transform", function(d) { return "translate(" + 15 + "," + (window_height* Math.ceil(d.classSize/3) + Math.ceil(d.classSize/3)*10 + 25) + ")";})
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", building_width*0.7)
-        .attr("height", 15)
-        .style("fill", function(d) { 
-            if(d.studentCo=="high") return coColors[0];
-            else if(d.studentCo=="med") return coColors[1];
-            else if(d.studentCo=="low") return coColors[2];
-            else return "black"; });
-
-
+            else return "black"; })
+        .style("stroke", "black");
 
     
     });
